@@ -4,14 +4,12 @@ from gpt import sendMsg
 
 app = Flask(__name__)
 
-# Connect to MongoDB
 client = MongoClient('mongodb+srv://priyam356:Tomar9999@cluster0.cawjk02.mongodb.net/')
 db = client['MeetingRecords']
 collection = db['Transcripts']
 
 @app.route('/')
 def index():
-    # Retrieve data from MongoDB
     data = list(collection.find())
     for item in data:
         if 'text' in item:

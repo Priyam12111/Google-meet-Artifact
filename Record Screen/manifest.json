@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Meet Recorder",
-  "version": "1.1",
+  "version": "1.2",
   "description": "A Chrome extension to Record the meeting - By Priyam",
   "permissions": ["activeTab", "scripting"],
   "background": {
@@ -15,5 +15,10 @@
       "matches": ["https://meet.google.com/*"],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
 }

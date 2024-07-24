@@ -59,13 +59,12 @@ try {
 
   if (element) {
     console.log("Element found, setting up MutationObserver...");
-
+    console.log("[:] Recording Started");
     const observer = new MutationObserver(async (mutations) => {
       clearTimeout(debounceTimeout);
 
       debounceTimeout = setTimeout(async () => {
         const text = element.innerText.trim();
-        console.log("Detected text:", text);
         if (text !== "" && !savedTexts.includes(text)) {
           if (text.includes("terminate")) {
             if (observer) {
@@ -73,12 +72,11 @@ try {
               await sendTextsToServer(savedTextsKey, savedTexts); // Ensure async is handled properly
               console.log("Observer Disconnected...");
             }
-            console.log("Terminating script...");
+            console.log("End");
             return;
           }
           savedTexts.push(text);
           saveToLocalStorage(savedTexts);
-          console.log("Saved text:", text);
         }
       }, 2000);
     });
