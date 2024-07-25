@@ -22,44 +22,49 @@ async function sendTextsToServer(id, texts) {
   }
 }
 
-try {
-  let Cap = document.querySelector("#ucc-9");
-  if (!Cap.innerText.includes("off")) {
-    console.log("Caption Turned On");
-    document
-      .querySelector(".VfPpkd-Bz112c-LgbsSe.fzRBVc.tmJved.xHd4Cb.rmHNDe")
-      .click();
-  } else {
-    console.log("Caption Turned OFF " + Cap.innerText);
+function initializeStyles() {
+  try {
+    document.querySelector(".a4cQT").style = "height:50px";
+  } catch (error) {
+    console.log("Error applying initial styles:", error);
   }
-} catch (error) {
-  console.log("Error:", error);
 }
 
-try {
-  const savedTextsKey = document.title;
-
-  // Clear local storage
-  localStorage.removeItem(savedTextsKey);
-
-  // Save text to local storage
-  function saveToLocalStorage(texts) {
-    localStorage.setItem(savedTextsKey, JSON.stringify(texts));
+function toggleCaptions() {
+  try {
+    const Cap = document.querySelector(
+      ".VfPpkd-Bz112c-LgbsSe.fzRBVc.tmJved.xHd4Cb.rmHNDe"
+    );
+    if (Cap && Cap.innerText.includes("off")) {
+      console.log("Caption Turned On With minimised size");
+      document
+        .querySelector(".VfPpkd-Bz112c-LgbsSe.fzRBVc.tmJved.xHd4Cb.rmHNDe")
+        .click();
+    }
+  } catch (error) {
+    console.log("Error toggling captions:", error);
   }
+}
 
-  // Retrieve text from local storage
-  function getFromLocalStorage() {
-    const saved = localStorage.getItem(savedTextsKey);
-    return saved ? JSON.parse(saved) : [];
-  }
+function saveToLocalStorage(texts, savedTextsKey) {
+  localStorage.setItem(savedTextsKey, JSON.stringify(texts));
+}
 
-  let savedTexts = getFromLocalStorage();
-  let element = document.querySelector(".iOzk7");
-  let debounceTimeout;
+function getFromLocalStorage(savedTextsKey) {
+  const saved = localStorage.getItem(savedTextsKey);
+  return saved ? JSON.parse(saved) : [];
+}
 
-  if (element) {
-    console.log("Element found, setting up MutationObserver...");
-    console.log("[:] Recording Started");
+function setupMutationObserver() {
+  try {
+    const savedTextsKey = document.title;
+
+    // Clear local storage
+    localStorage.removeItem(savedTextsKey);
+
+    let savedTexts = getFromLocalStorage(savedTextsKey);
+    let element = document.querySelector(".iOzk7");
+    let debounceTimeout;
     const observer = new MutationObserver(async (mutations) => {
       clearTimeout(debounceTimeout);
 
@@ -73,18 +78,70 @@ try {
               console.log("Observer Disconnected...");
             }
             console.log("End");
+            document.querySelector(".JHK7jb.Nep7Ue").style = "background:black";
             return;
           }
           savedTexts.push(text);
-          saveToLocalStorage(savedTexts);
+          saveToLocalStorage(savedTexts, savedTextsKey);
         }
       }, 2000);
     });
+    if (element) {
+      const endButton = document.createElement("button");
+      endButton.id = "StopRecording";
+      endButton.innerText = "End";
+      endButton.style = `
+        padding: 10px 20px;
+        background-color: #ff3d00; /* Google Meet red */
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        z-index: 1000;
+      `;
+      endButton.onmouseover = () => {
+        endButton.style.backgroundColor =
+          "#e03a00"; /* Slightly darker red on hover */
+        endButton.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.3)";
+      };
+      endButton.onmouseout = () => {
+        endButton.style.backgroundColor = "#ff3d00";
+        endButton.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.2)";
+      };
+      document.querySelector(".Tmb7Fd").appendChild(endButton);
 
-    observer.observe(element, { childList: true, subtree: true });
-  } else {
-    console.log("Please turn on the Extension to Record the Meeting");
+      endButton.addEventListener("click", () => {
+        if (observer) {
+          observer.disconnect();
+          sendTextsToServer(savedTextsKey, savedTexts);
+          console.log("Observer manually disconnected.");
+          document
+            .querySelector(".VfPpkd-Bz112c-LgbsSe.fzRBVc.tmJved.xHd4Cb.rmHNDe")
+            .click();
+          document.querySelector(".JHK7jb.Nep7Ue").style = "background:black";
+          document.querySelector("#StopRecording").style = "display:None";
+        } else {
+          console.log("Observer Not Found.");
+        }
+      });
+    }
+    if (element) {
+      console.log("Element found, setting up MutationObserver...");
+      console.log("[:] Recording Started");
+      observer.observe(element, { childList: true, subtree: true });
+    } else {
+      console.log("Please turn on the Extension to Record the Meeting");
+    }
+  } catch (error) {
+    console.error("An error occurred:", error);
   }
-} catch (error) {
-  console.error("An error occurred:", error);
 }
+
+// Initialize styles, toggle captions, MutationObserver, and button setup
+initializeStyles();
+toggleCaptions();
+setupMutationObserver();
