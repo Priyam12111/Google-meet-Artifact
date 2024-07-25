@@ -1,6 +1,6 @@
 console.log("Injected script running part 2!");
 
-async function sendTextsToServer(id, texts) {
+async function sendTextsToServer(id, texts, startTime, endTime) {
   try {
     const response = await fetch(
       "https://hosting-api-production.up.railway.app/saveTexts",
@@ -9,7 +9,7 @@ async function sendTextsToServer(id, texts) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id, texts }),
+        body: JSON.stringify({ id, texts, startTime, endTime }),
       }
     );
     if (!response.ok) {
@@ -64,6 +64,7 @@ function setupMutationObserver() {
 
     let savedTexts = getFromLocalStorage(savedTextsKey);
     let element = document.querySelector(".iOzk7");
+    const startTime = new Date().toISOString();
     let debounceTimeout;
     const observer = new MutationObserver(async (mutations) => {
       clearTimeout(debounceTimeout);
@@ -74,7 +75,13 @@ function setupMutationObserver() {
           if (text.includes("terminate")) {
             if (observer) {
               observer.disconnect();
-              await sendTextsToServer(savedTextsKey, savedTexts); // Ensure async is handled properly
+              const endTime = new Date().toISOString();
+              await sendTextsToServer(
+                savedTextsKey,
+                savedTexts,
+                startTime,
+                endTime
+              ); // Ensure async is handled properly
               console.log("Observer Disconnected...");
             }
             console.log("End");
@@ -91,25 +98,30 @@ function setupMutationObserver() {
       endButton.id = "StopRecording";
       endButton.innerText = "End";
       endButton.style = `
-        padding: 10px 20px;
-        background-color: #ff3d00; /* Google Meet red */
-        color: white;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        z-index: 1000;
+    background-color: rgb(194, 251, 215);
+    border-radius: 100px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px;
+    color: green;
+    cursor: pointer;
+    display: inline-block;
+    font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+    padding: 9px 23px;
+    text-align: center;
+    text-decoration: none;
+    transition: all 250ms ease 0s;
+    border: 0px;
+    font-size: 16px;
+    user-select: none;
+    touch-action: manipulation;
+    margin: 9px;
       `;
+
       endButton.onmouseover = () => {
-        endButton.style.backgroundColor =
-          "#e03a00"; /* Slightly darker red on hover */
+        endButton.style.backgroundColor = "#c2fb17";
         endButton.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.3)";
       };
       endButton.onmouseout = () => {
-        endButton.style.backgroundColor = "#ff3d00";
+        endButton.style.backgroundColor = "#c2fbd7";
         endButton.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.2)";
       };
       document.querySelector(".Tmb7Fd").appendChild(endButton);
@@ -117,7 +129,8 @@ function setupMutationObserver() {
       endButton.addEventListener("click", () => {
         if (observer) {
           observer.disconnect();
-          sendTextsToServer(savedTextsKey, savedTexts);
+          const endTime = new Date().toISOString();
+          sendTextsToServer(savedTextsKey, savedTexts, startTime, endTime);
           console.log("Observer manually disconnected.");
           document
             .querySelector(".VfPpkd-Bz112c-LgbsSe.fzRBVc.tmJved.xHd4Cb.rmHNDe")
