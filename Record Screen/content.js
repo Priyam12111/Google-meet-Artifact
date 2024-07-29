@@ -64,7 +64,10 @@ function setupMutationObserver() {
 
     let savedTexts = getFromLocalStorage(savedTextsKey);
     let element = document.querySelector(".iOzk7");
-    const startTime = new Date().toISOString();
+    let startTime = new Date();
+    const utcOffset = 5.5 * 60; // 5 hours and 30 minutes in minutes
+    const localTime = new Date(startTime.getTime() + utcOffset * 60 * 1000);
+    startTime = localTime.toISOString().replace("Z", "+05:30");
     let debounceTimeout;
     const observer = new MutationObserver(async (mutations) => {
       clearTimeout(debounceTimeout);
@@ -75,7 +78,12 @@ function setupMutationObserver() {
           if (text.includes("terminate")) {
             if (observer) {
               observer.disconnect();
-              const endTime = new Date().toISOString();
+              let endTime = new Date();
+              const utcOffset = 5.5 * 60; // 5 hours and 30 minutes in minutes
+              const localTime = new Date(
+                startTime.getTime() + utcOffset * 60 * 1000
+              );
+              endTime = localTime.toISOString().replace("Z", "+05:30");
               await sendTextsToServer(
                 savedTextsKey,
                 savedTexts,
@@ -129,7 +137,10 @@ function setupMutationObserver() {
       endButton.addEventListener("click", () => {
         if (observer) {
           observer.disconnect();
-          const endTime = new Date().toISOString();
+          let endTime = new Date();
+          const utcOffset = 5.5 * 60; // 5 hours and 30 minutes in minutes
+          const localTime = new Date(endTime.getTime() + utcOffset * 60 * 1000);
+          endTime = localTime.toISOString().replace("Z", "+05:30");
           sendTextsToServer(savedTextsKey, savedTexts, startTime, endTime);
           console.log("Observer manually disconnected.");
           document
@@ -137,6 +148,7 @@ function setupMutationObserver() {
             .click();
           document.querySelector(".JHK7jb.Nep7Ue").style = "background:black";
           document.querySelector("#StopRecording").style = "display:None";
+          return;
         } else {
           console.log("Observer Not Found.");
         }
