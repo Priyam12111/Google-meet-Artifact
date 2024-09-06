@@ -57,9 +57,7 @@ function getFromLocalStorage(savedTextsKey) {
 
 function setupMutationObserver() {
   try {
-    const savedTextsKey = document.title;
-
-    // Clear local storage
+    const savedTextsKey = document.title.split(" ")[2];
     localStorage.removeItem(savedTextsKey);
 
     let savedTexts = getFromLocalStorage(savedTextsKey);
