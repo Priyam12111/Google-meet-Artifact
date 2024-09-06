@@ -36,9 +36,6 @@ cd meeting-recorder-extension
 - To stop click the end button that is created by the extension.
 
 ## View Summary
-Go to 
-```bash
-https://meeting-records.onrender.com/
-```
+Go to [Meeting Records](https://meeting-records.onrender.com/)
 Access the summary and recordings through the extension's interface.
 
