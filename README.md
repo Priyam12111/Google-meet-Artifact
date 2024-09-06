@@ -15,7 +15,8 @@ This project involves a Chrome extension designed to record meetings. The extens
 1. **Clone the Repository**
 
    ```bash
-   https://github.com/Priyam12111/Google-meet-Artifact.git```
+   https://github.com/Priyam12111/Google-meet-Artifact.git
+   ```
 2.Navigate to the Directory
 ```bash
 cd meeting-recorder-extension
