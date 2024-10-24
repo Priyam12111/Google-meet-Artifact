@@ -22,7 +22,10 @@ This project involves a Chrome extension designed to record meetings. The extens
 cd meeting-recorder-extension
 ```
 3. Load the Extension in Chrome
-- Open Chrome and go to chrome://extensions/.
+- Open Chrome and go to
+```bash
+chrome://extensions/.
+```
 - Enable Developer mode (toggle switch in the top right corner).
 - Click Load unpacked.
 - Select the extension directory from your project.
