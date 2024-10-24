@@ -37,7 +37,7 @@ chrome://extensions/
 - Click the extension icon in the Chrome toolbar to start recording.
 - To stop click the end button that is created by the extension.
 
-## View Summary
+## Artifacts
 Go to [Meeting Records](https://meeting-records.vercel.app/)
 Access the summary and recordings through the extension's interface.
 
