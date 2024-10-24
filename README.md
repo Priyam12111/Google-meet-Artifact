@@ -23,8 +23,8 @@ cd meeting-recorder-extension
 ```
 3. Load the Extension in Chrome
 - Open Chrome and go to
-```bash
-chrome://extensions/.
+```url
+chrome://extensions/
 ```
 - Enable Developer mode (toggle switch in the top right corner).
 - Click Load unpacked.
@@ -33,13 +33,11 @@ chrome://extensions/.
 ## Usage
 - Start Google Meet Session:
 
-- Join or start a Google Meet session as usual.
-- Activate the Extension:
- 
+- Join or start a Google Meet session as usual. 
 - Click the extension icon in the Chrome toolbar to start recording.
 - To stop click the end button that is created by the extension.
 
 ## View Summary
-Go to [Meeting Records](https://meeting-records.onrender.com/)
+Go to [Meeting Records](https://meeting-records.vercel.app/)
 Access the summary and recordings through the extension's interface.
 
