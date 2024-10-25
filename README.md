@@ -38,6 +38,6 @@ chrome://extensions/
 - To stop click the end button that is created by the extension.
 
 ## Artifacts
-Go to [Meeting Records](https://meeting-records.vercel.app/)
+Go to [Meeting Records](https://meeting-records.onrender.com/)
 Access the summary and recordings through the extension's interface.
 
